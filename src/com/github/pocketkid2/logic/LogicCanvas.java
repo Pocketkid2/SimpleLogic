@@ -3,9 +3,12 @@ package com.github.pocketkid2.logic;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Shape;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.geom.Ellipse2D;
+import java.awt.geom.Path2D;
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,14 +19,14 @@ public class LogicCanvas extends JPanel implements MouseListener {
 	// For completeness
 	private static final long serialVersionUID = -2199087572689809886L;
 	
-	private List<Ellipse2D> spots;
+	private List<Shape> shape;
 	
 	// Perform panel setup here
 	public LogicCanvas() {
 		
 		setBackground(Color.LIGHT_GRAY);
 		
-		spots = new ArrayList<Ellipse2D>();
+		shape = new ArrayList<Shape>();
 		
 		addMouseListener(this);
 
@@ -38,17 +41,35 @@ public class LogicCanvas extends JPanel implements MouseListener {
 		// The 2D version has more stuff
 		Graphics2D g2d = (Graphics2D) g;
 
-		for (Ellipse2D el : spots) {
-			g2d.fill(el);
+		for (Shape s : shape) {
+			g2d.fill(s);
 		}
 	}
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		Ellipse2D el = new Ellipse2D.Double(e.getX() - 25, e.getY() - 25, 50, 50);
-		spots.add(el);
+		Shape s;
+
+		switch (LogicPalette.selection) {
+			case CIRCLE:
+				s = new Ellipse2D.Double(e.getX() - 25, e.getY() - 25, 50, 50);
+				break;
+			case SQUARE:
+				s = new Rectangle2D.Double(e.getX() - 25, e.getY() - 25, 50, 50);
+				break;
+			case TRIANGLE:
+				s = new Path2D.Double();
+				((Path2D) s).moveTo(e.getX(), e.getY() - 25);
+				((Path2D) s).lineTo(e.getX() - 25, e.getY() + 25);
+				((Path2D) s).lineTo(e.getX() + 25, e.getY() + 25);
+				break;
+			default:
+				return;
+			
+		}
+		
+		shape.add(s);
 		repaint();
-		System.out.println("Clicked");
 	}
 	
 	@Override
