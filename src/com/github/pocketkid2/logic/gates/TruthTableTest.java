@@ -1,4 +1,4 @@
-package com.github.pocketkid2.logic;
+package com.github.pocketkid2.logic.gates;
 
 import org.junit.jupiter.api.Test;
 

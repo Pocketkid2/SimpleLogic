@@ -1,4 +1,4 @@
-package com.github.pocketkid2.logic;
+package com.github.pocketkid2.logic.gates;
 
 // This class represents a truth table with any given inputs and outputs
 public class TruthTable {
